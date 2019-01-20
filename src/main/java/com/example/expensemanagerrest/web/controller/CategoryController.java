@@ -4,6 +4,7 @@ import com.example.expensemanagerrest.model.Category;
 import com.example.expensemanagerrest.service.CategoryService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by Ovidiu on 19-Jan-19.
  */
 @RestController
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3000)
 public class CategoryController {
 
   @Autowired
@@ -22,6 +24,7 @@ public class CategoryController {
   @GetMapping("/categories")
   public List<Category> getCategories() {
     List<Category> categories = categoryService.findAll();
+    //return ResponseEntity.status(HttpStatus.OK).body(categories);
     return categories;
   }
 
