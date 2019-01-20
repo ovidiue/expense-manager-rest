@@ -5,6 +5,7 @@ import com.example.expensemanagerrest.repository.CategoryRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by Ovidiu on 19-Jan-19.
@@ -25,6 +26,11 @@ public class CategoryService {
 
   public void deleteCategory(Category category) {
     this.categoryRepository.delete(category);
+  }
+
+  @Transactional
+  public void deleteCategories(List<Long> list) {
+    this.categoryRepository.deleteByIdIn(list);
   }
 
 }

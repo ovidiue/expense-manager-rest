@@ -5,7 +5,6 @@ import com.example.expensemanagerrest.service.CategoryService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,9 +32,9 @@ public class CategoryController {
     this.categoryService.saveCategory(category);
   }
 
-  @DeleteMapping("/categories/delete/")
-  public void deleteCategory(@RequestBody Category category) {
-    this.categoryService.deleteCategory(category);
+  @PostMapping("/categories/delete")
+  public void deleteCategories(@RequestBody List<Long> list) {
+    this.categoryService.deleteCategories(list);
   }
 
 
