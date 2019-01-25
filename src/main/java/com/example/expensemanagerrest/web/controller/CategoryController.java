@@ -3,9 +3,13 @@ package com.example.expensemanagerrest.web.controller;
 import com.example.expensemanagerrest.model.Category;
 import com.example.expensemanagerrest.service.CategoryService;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,8 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Created by Ovidiu on 19-Jan-19.
  */
+@Slf4j
 @RestController
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3000)
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class CategoryController {
 
   @Autowired
@@ -27,14 +32,23 @@ public class CategoryController {
     return categories;
   }
 
+  @GetMapping("/categories/{catId}")
+  public Category getCategory(@PathVariable Long catId) {
+    log.info("catId {}", catId);
+    Category category = this.categoryService.getCategory(catId);
+    log.info("category {}", category);
+    return category;
+  }
+
   @PostMapping("/categories/save")
   public void saveCategory(@RequestBody Category category) {
     this.categoryService.saveCategory(category);
   }
 
   @PostMapping("/categories/delete")
-  public void deleteCategories(@RequestBody List<Long> list) {
+  public ResponseEntity<String> deleteCategories(@RequestBody List<Long> list) {
     this.categoryService.deleteCategories(list);
+    return new ResponseEntity<String>("Deleted", HttpStatus.OK);
   }
 
 

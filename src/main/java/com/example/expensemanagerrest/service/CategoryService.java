@@ -28,6 +28,10 @@ public class CategoryService {
     this.categoryRepository.delete(category);
   }
 
+  public Category getCategory(Long catId) {
+    return this.categoryRepository.getOne(catId);
+  }
+
   @Transactional
   public void deleteCategories(List<Long> list) {
     this.categoryRepository.deleteByIdIn(list);
