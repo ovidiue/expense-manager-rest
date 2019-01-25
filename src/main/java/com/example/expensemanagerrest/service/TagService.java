@@ -18,20 +18,20 @@ public class TagService {
     return this.tagRepository.findAll();
   }
 
-  public void saveCategory(Tag tag) {
+  public void saveTag(Tag tag) {
     this.tagRepository.save(tag);
   }
 
-  public void deleteCategory(Tag tag) {
+  public void deleteTag(Tag tag) {
     this.tagRepository.delete(tag);
   }
 
-  public Tag getCategory(Long tagId) {
+  public Tag getTag(Long tagId) {
     return this.tagRepository.getOne(tagId);
   }
 
   @Transactional
-  public void deleteCategories(List<Long> list) {
+  public void deleteTags(List<Long> list) {
     this.tagRepository.deleteByIdIn(list);
   }
 
