@@ -1,5 +1,6 @@
 package com.example.expensemanagerrest.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,6 +24,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Transactional
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//TODO investigate jsonignoreproperties
 public class Tag {
 
   @Column
