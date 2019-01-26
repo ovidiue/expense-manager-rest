@@ -1,6 +1,7 @@
 package com.example.expensemanagerrest.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,6 +22,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 @Data
 @ToString(exclude = "expense")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+    property = "id",
+    scope = Long.class)
 public class Rate {
 
   @Column
@@ -40,7 +44,6 @@ public class Rate {
 
   @LazyCollection(LazyCollectionOption.FALSE)
   @ManyToOne
-  @JsonManagedReference
   private Expense expense;
 
   public Rate() {

@@ -1,6 +1,7 @@
 package com.example.expensemanagerrest.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -31,6 +32,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 @ToString(exclude = "rates")
 @Slf4j
 @Transactional
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+    property = "id",
+    scope = Long.class)
 public class Expense {
 
   @Column
@@ -62,7 +66,6 @@ public class Expense {
   private Category category;
   @OneToMany(cascade = CascadeType.DETACH, mappedBy = "expense")
   @LazyCollection(LazyCollectionOption.FALSE)
-  @JsonBackReference
   private List<Rate> rates;
 
   public Expense() {

@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,8 +41,9 @@ public class ExpenseController {
     return expense;
   }
 
-  @PostMapping("/expenses/save")
+  @PostMapping(value = "/expenses/save", consumes = MediaType.APPLICATION_JSON_VALUE)
   public void saveExpense(@RequestBody Expense expense) {
+    log.info("expense to save {}", expense);
     this.expenseService.saveExpense(expense);
   }
 
