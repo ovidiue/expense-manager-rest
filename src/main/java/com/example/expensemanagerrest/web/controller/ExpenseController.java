@@ -50,7 +50,7 @@ public class ExpenseController {
   @PostMapping("/expenses/delete")
   public ResponseEntity<String> deleteExpenses(@RequestBody List<Long> list) {
     this.expenseService.deleteExpenses(list);
-    return new ResponseEntity<String>("Deleted", HttpStatus.OK);
+    return new ResponseEntity<String>(HttpStatus.OK);
   }
 
 }
