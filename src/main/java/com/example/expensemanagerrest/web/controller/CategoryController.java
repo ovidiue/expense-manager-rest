@@ -40,9 +40,19 @@ public class CategoryController {
     return category;
   }
 
+  @GetMapping("/categories/name/{name}")
+  public Category getCategoryByName(@PathVariable String name) {
+    return this.categoryService.getByName(name);
+  }
+
   @PostMapping("/categories/save")
-  public void saveCategory(@RequestBody Category category) {
-    this.categoryService.saveCategory(category);
+  public ResponseEntity saveCategory(@RequestBody Category category) {
+    if (this.categoryService.getByName(category.getName()) != null) {
+      return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    } else {
+      this.categoryService.saveCategory(category);
+      return new ResponseEntity(HttpStatus.OK);
+    }
   }
 
   @PostMapping("/categories/delete")
