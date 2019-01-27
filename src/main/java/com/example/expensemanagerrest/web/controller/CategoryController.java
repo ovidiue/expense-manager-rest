@@ -3,6 +3,7 @@ package com.example.expensemanagerrest.web.controller;
 import com.example.expensemanagerrest.model.Category;
 import com.example.expensemanagerrest.service.CategoryService;
 import java.util.List;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,9 +37,9 @@ public class CategoryController {
   @GetMapping("/categories/{catId}")
   public Category getCategory(@PathVariable Long catId) {
     log.info("catId {}", catId);
-    Category category = this.categoryService.getCategory(catId);
-    log.info("category {}", category);
-    return category;
+    Optional<Category> category = this.categoryService.findById(catId);
+    log.info("category {}", category.get());
+    return category.get();
   }
 
   @GetMapping("/categories/name/{name}")
@@ -48,10 +50,22 @@ public class CategoryController {
   @PostMapping("/categories/save")
   public ResponseEntity saveCategory(@RequestBody Category category) {
     if (this.categoryService.getByName(category.getName()) != null) {
-      return new ResponseEntity(HttpStatus.BAD_REQUEST);
+      return ResponseEntity.badRequest().body("name exists");
     } else {
       this.categoryService.saveCategory(category);
-      return new ResponseEntity(HttpStatus.OK);
+      return ResponseEntity.ok().build();
+    }
+  }
+
+  @PutMapping("/categories/update/{catId}")
+  public ResponseEntity updateCategory(@RequestBody Category category, @PathVariable Long catId) {
+    Optional<Category> optCategory = this.categoryService.findById(catId);
+    if (!optCategory.isPresent()) {
+      return ResponseEntity.notFound().build();
+    } else {
+      category.setId(catId);
+      this.categoryService.saveCategory(category);
+      return ResponseEntity.ok().build();
     }
   }
 

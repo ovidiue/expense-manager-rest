@@ -3,6 +3,7 @@ package com.example.expensemanagerrest.service;
 import com.example.expensemanagerrest.model.Category;
 import com.example.expensemanagerrest.repository.CategoryRepository;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,8 +29,8 @@ public class CategoryService {
     this.categoryRepository.delete(category);
   }
 
-  public Category getCategory(Long catId) {
-    return this.categoryRepository.getOne(catId);
+  public Optional<Category> findById(Long catId) {
+    return this.categoryRepository.findById(catId);
   }
 
   @Transactional
