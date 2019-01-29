@@ -1,6 +1,7 @@
 package com.example.expensemanagerrest.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.util.Date;
 import javax.persistence.Column;
@@ -25,6 +26,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
     property = "id",
     scope = Long.class)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Rate {
 
   @Column
