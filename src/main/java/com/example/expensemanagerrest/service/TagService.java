@@ -3,6 +3,7 @@ package com.example.expensemanagerrest.service;
 import com.example.expensemanagerrest.model.Tag;
 import com.example.expensemanagerrest.repository.TagRepository;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +36,10 @@ public class TagService {
   @Transactional
   public void deleteTags(List<Long> list) {
     this.tagRepository.deleteByIdIn(list);
+  }
+
+  public Optional<Tag> findByName(String name) {
+    return this.tagRepository.findByName(name);
   }
 
 }

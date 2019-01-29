@@ -3,6 +3,7 @@ package com.example.expensemanagerrest.web.controller;
 import com.example.expensemanagerrest.model.Tag;
 import com.example.expensemanagerrest.service.TagService;
 import java.util.List;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,6 +50,11 @@ public class TagController {
   public ResponseEntity<String> deletetags(@RequestBody List<Long> list) {
     this.tagService.deleteTags(list);
     return new ResponseEntity<String>("Deleted", HttpStatus.OK);
+  }
+
+  @GetMapping("/tags/name/{name}")
+  public Optional<Tag> getTagByName(@PathVariable String name) {
+    return this.tagService.findByName(name);
   }
 
 }
