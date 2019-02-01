@@ -1,13 +1,18 @@
 package com.example.expensemanagerrest.model;
 
+import com.example.expensemanagerrest.repository.RateRepository;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
@@ -23,9 +28,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 @Data
 @ToString(exclude = "expense")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+/*@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
     property = "id",
-    scope = Long.class)
+    scope = Long.class)*/
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Rate {
 
@@ -46,6 +51,8 @@ public class Rate {
 
   @LazyCollection(LazyCollectionOption.FALSE)
   @ManyToOne
+  /*@JsonManagedReference*/
+  @JsonBackReference
   private Expense expense;
 
   public Rate() {

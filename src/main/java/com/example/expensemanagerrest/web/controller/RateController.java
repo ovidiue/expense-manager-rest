@@ -6,7 +6,7 @@ import com.example.expensemanagerrest.service.RateService;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,8 +45,9 @@ public class RateController {
     return rate;
   }
 
-  @PostMapping("/save")
+  @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE)
   public void saveRate(@RequestBody Rate rate) {
+    log.info("\nRATE: {}", rate);
     if (rate.getExpense() != null) {
       rate.getExpense().addRate(rate);
       this.expenseService.saveExpense(rate.getExpense());

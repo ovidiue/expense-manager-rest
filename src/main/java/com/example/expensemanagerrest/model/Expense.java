@@ -1,8 +1,7 @@
 package com.example.expensemanagerrest.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -21,8 +20,6 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -34,9 +31,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Slf4j
 @Transactional
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+/*@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
     property = "id",
-    scope = Long.class)
+    scope = Long.class)*/
 public class Expense {
 
   @Column
@@ -67,7 +64,8 @@ public class Expense {
   @ManyToOne
   private Category category;
   @OneToMany(cascade = CascadeType.DETACH, mappedBy = "expense")
-  @LazyCollection(LazyCollectionOption.FALSE)
+  /*@LazyCollection(LazyCollectionOption.FALSE)*/
+  /*@JsonBackReference*/
   private List<Rate> rates;
 
   public Expense() {
