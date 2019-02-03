@@ -1,15 +1,9 @@
 package com.example.expensemanagerrest.model;
 
-import com.example.expensemanagerrest.repository.RateRepository;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -18,8 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.ToString;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -49,10 +41,8 @@ public class Rate {
   @GeneratedValue
   private Long id;
 
-  @LazyCollection(LazyCollectionOption.FALSE)
   @ManyToOne
-  /*@JsonManagedReference*/
-  @JsonBackReference
+  @JoinColumn(name = "expense_id")
   private Expense expense;
 
   public Rate() {

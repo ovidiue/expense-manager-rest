@@ -1,6 +1,5 @@
 package com.example.expensemanagerrest.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Date;
 import java.util.List;
@@ -13,12 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -27,7 +24,6 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Entity
 @Data
-@ToString(exclude = "rates")
 @Slf4j
 @Transactional
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -63,23 +59,12 @@ public class Expense {
   private List<Tag> tags;
   @ManyToOne
   private Category category;
-  @OneToMany(cascade = CascadeType.DETACH, mappedBy = "expense")
-  /*@LazyCollection(LazyCollectionOption.FALSE)*/
-  /*@JsonBackReference*/
-  private List<Rate> rates;
+
 
   public Expense() {
     this.createdOn = new Date();
     this.payed = 0.0;
   }
 
-  public void addRate(Rate rate) {
-    this.rates.add(rate);
-    this.payed += rate.getAmount();
-  }
 
-  public void removeRate(Rate rate) {
-    this.rates.remove(rate);
-    this.payed -= rate.getAmount();
-  }
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -30,9 +31,19 @@ public class RateController {
   @Autowired
   private ExpenseService expenseService;
 
-  @GetMapping()
+  @GetMapping("")
   public List<Rate> getRates() {
+    log.info("\ngetRates called");
     List<Rate> rates = rateService.findAll();
+    //return ResponseEntity.status(HttpStatus.OK).body(rates);
+    return rates;
+  }
+
+  @GetMapping("/exp")
+  public List<Rate> getRatesByExpenseId(@RequestParam Long expId) {
+    log.info("\nExpense id {}", expId);
+    List<Rate> rates = rateService.findAllByExpenseId(expId);
+    log.info("\nrates by expense id {}", rates);
     //return ResponseEntity.status(HttpStatus.OK).body(rates);
     return rates;
   }
@@ -49,7 +60,6 @@ public class RateController {
   public void saveRate(@RequestBody Rate rate) {
     log.info("\nRATE: {}", rate);
     if (rate.getExpense() != null) {
-      rate.getExpense().addRate(rate);
       this.expenseService.saveExpense(rate.getExpense());
     }
     this.rateService.saveRate(rate);
