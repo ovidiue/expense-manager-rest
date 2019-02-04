@@ -49,6 +49,7 @@ public class ExpenseController {
 
   @PostMapping("/expenses/delete")
   public ResponseEntity<String> deleteExpenses(@RequestBody List<Long> list) {
+    // TODO implement deletion when a rate points to the deleted expense
     this.expenseService.deleteExpenses(list);
     return new ResponseEntity<String>(HttpStatus.OK);
   }

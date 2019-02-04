@@ -66,5 +66,13 @@ public class Expense {
     this.payed = 0.0;
   }
 
+  public void addRate(Rate rate) {
+    this.payed += rate.getAmount();
+  }
+
+  public void removeRate(Rate rate) {
+    this.payed -= rate.getAmount();
+  }
+
 
 }
