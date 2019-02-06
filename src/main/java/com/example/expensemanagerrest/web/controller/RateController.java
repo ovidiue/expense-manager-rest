@@ -117,9 +117,18 @@ public class RateController {
   }
 
   @PostMapping("/delete")
-  public ResponseEntity<String> deleteRates(@RequestBody List<Long> list) {
+  public ResponseEntity deleteRates(@RequestBody List<Long> list) {
+    this.rateService.findAllWithIdIn(list)
+        .stream()
+        .filter(rate -> rate.getExpense() != null)
+        .forEach(rate -> {
+          Expense expense = rate.getExpense();
+          expense.removeRate(rate);
+          this.expenseService.saveExpense(expense);
+        });
+
     this.rateService.deleteRates(list);
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok(list);
   }
 
 }
