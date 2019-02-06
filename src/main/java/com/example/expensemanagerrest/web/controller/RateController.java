@@ -48,6 +48,12 @@ public class RateController {
     return rates;
   }
 
+  @GetMapping("/expenses")
+  public List<Rate> getRatesByExpenseIdList(@RequestParam List<Long> expenseIds) {
+    List<Rate> rates = rateService.findAllByExpenseIdsList(expenseIds);
+    return rates;
+  }
+
   @GetMapping("/{rateId}")
   public Rate getRate(@PathVariable Long rateId) {
     log.info("\nGET_RATE_CALLED");

@@ -36,6 +36,10 @@ public class RateService {
     return this.rateRepository.findAllByExpense_Id(id);
   }
 
+  public List<Rate> findAllByExpenseIdsList(List<Long> ids) {
+    return this.rateRepository.findByExpenseIdIn(ids);
+  }
+
   @Transactional
   public void deleteRates(List<Long> list) {
     this.rateRepository.deleteByIdIn(list);

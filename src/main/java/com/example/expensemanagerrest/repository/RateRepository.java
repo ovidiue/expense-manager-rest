@@ -15,4 +15,6 @@ public interface RateRepository extends JpaRepository<Rate, Long> {
 
   List<Rate> findAllByExpense_Id(Long id);
 
+  List<Rate> findByExpenseIdIn(List<Long> ids);
+
 }
