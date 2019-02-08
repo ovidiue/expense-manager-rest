@@ -1,6 +1,7 @@
 package com.example.expensemanagerrest.service;
 
 import com.example.expensemanagerrest.model.Expense;
+import com.example.expensemanagerrest.model.Tag;
 import com.example.expensemanagerrest.repository.ExpenseRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,10 @@ public class ExpenseService {
 
   public List<Expense> findAllWithCategoryIdIn(List<Long> ids) {
     return this.expenseRepository.findAllByCategoryId(ids);
+  }
+
+  public List<Expense> findAllWhereTagsIdIn(List<Tag> tags) {
+    return this.expenseRepository.findDistinctByTagsIn(tags);
   }
 
 }

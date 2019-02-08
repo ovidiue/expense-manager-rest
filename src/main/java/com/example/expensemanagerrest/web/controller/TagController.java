@@ -1,12 +1,14 @@
 package com.example.expensemanagerrest.web.controller;
 
+import com.example.expensemanagerrest.model.Expense;
 import com.example.expensemanagerrest.model.Tag;
+import com.example.expensemanagerrest.service.ExpenseService;
 import com.example.expensemanagerrest.service.TagService;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +27,9 @@ public class TagController {
 
   @Autowired
   private TagService tagService;
+
+  @Autowired
+  private ExpenseService expenseService;
 
   @GetMapping("/tags")
   public List<Tag> gettags() {
@@ -47,9 +52,22 @@ public class TagController {
   }
 
   @PostMapping("/tags/delete")
-  public ResponseEntity<String> deletetags(@RequestBody List<Long> list) {
-    this.tagService.deleteTags(list);
-    return new ResponseEntity<String>("Deleted", HttpStatus.OK);
+  public ResponseEntity deleteTags(@RequestBody List<Tag> list) {
+    List<Expense> result = this.expenseService.findAllWhereTagsIdIn(list);
+    log.info("\nRESULT {}", result);
+    this.expenseService.findAllWhereTagsIdIn(list)
+        .forEach(expense -> {
+          log.info("\n\texpense {}", expense);
+          List<Tag> toRemove = expense.getTags()
+              .stream()
+              .filter(tag -> list.contains(tag))
+              .collect(Collectors.toList());
+          log.info("\n\ttoRemove {}", toRemove);
+          expense.getTags().removeAll(toRemove);
+          this.expenseService.saveExpense(expense);
+        });
+    this.tagService.deleteTags(list.stream().map(Tag::getId).collect(Collectors.toList()));
+    return ResponseEntity.ok(list);
   }
 
   @GetMapping("/tags/name/{name}")
