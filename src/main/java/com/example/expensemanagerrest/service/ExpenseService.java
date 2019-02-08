@@ -37,4 +37,12 @@ public class ExpenseService {
     this.expenseRepository.deleteByIdIn(list);
   }
 
+  public List<Expense> findAllWithIdIn(List<Long> ids) {
+    return this.expenseRepository.findByIdIn(ids);
+  }
+
+  public List<Expense> findAllWithCategoryIdIn(List<Long> ids) {
+    return this.expenseRepository.findAllByCategoryId(ids);
+  }
+
 }

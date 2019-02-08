@@ -12,4 +12,8 @@ import org.springframework.stereotype.Repository;
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 
   void deleteByIdIn(List<Long> list);
+
+  List<Expense> findByIdIn(List<Long> ids);
+
+  List<Expense> findAllByCategoryId(List<Long> ids);
 }
