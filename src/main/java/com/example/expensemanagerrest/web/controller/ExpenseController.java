@@ -1,6 +1,7 @@
 package com.example.expensemanagerrest.web.controller;
 
 import com.example.expensemanagerrest.model.Expense;
+import com.example.expensemanagerrest.model.filters.ExpenseFilter;
 import com.example.expensemanagerrest.service.ExpenseService;
 import com.example.expensemanagerrest.service.RateService;
 import java.util.List;
@@ -32,8 +33,9 @@ public class ExpenseController {
   private RateService rateService;
 
   @GetMapping("/expenses")
-  public List<Expense> getExpenses() {
-    List<Expense> expenses = expenseService.findAll();
+  public List<Expense> getExpenses(ExpenseFilter expenseFilter) {
+    List<Expense> expenses = expenseService.findAll(expenseFilter);
+    log.info("\nexpenses with filter {}", expenses);
     //return ResponseEntity.status(HttpStatus.OK).body(categories);
     return expenses;
   }
