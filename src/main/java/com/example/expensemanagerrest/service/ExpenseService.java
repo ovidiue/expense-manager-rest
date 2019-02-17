@@ -1,5 +1,6 @@
 package com.example.expensemanagerrest.service;
 
+import com.example.expensemanagerrest.model.Category;
 import com.example.expensemanagerrest.model.Expense;
 import com.example.expensemanagerrest.model.Tag;
 import com.example.expensemanagerrest.model.filters.ExpenseFilter;
@@ -60,8 +61,8 @@ public class ExpenseService {
     return this.expenseRepository.findByIdIn(ids);
   }
 
-  public List<Expense> findAllWithCategoryIdIn(List<Long> ids) {
-    return this.expenseRepository.findAllByCategoryId(ids);
+  public List<Expense> findAllWithCategoryInList(List<Category> categories) {
+    return this.expenseRepository.findAllByCategoryIn(categories);
   }
 
   public List<Expense> findAll(ExpenseFilter filter) {

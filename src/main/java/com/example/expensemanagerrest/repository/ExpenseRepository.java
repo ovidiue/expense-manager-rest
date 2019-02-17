@@ -1,5 +1,6 @@
 package com.example.expensemanagerrest.repository;
 
+import com.example.expensemanagerrest.model.Category;
 import com.example.expensemanagerrest.model.Expense;
 import com.example.expensemanagerrest.model.Tag;
 import java.util.List;
@@ -16,7 +17,7 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 
   List<Expense> findByIdIn(List<Long> ids);
 
-  List<Expense> findAllByCategoryId(List<Long> ids);
+  List<Expense> findAllByCategoryIn(List<Category> categories);
 
   List<Expense> findDistinctByTagsIn(List<Tag> tags);
 }

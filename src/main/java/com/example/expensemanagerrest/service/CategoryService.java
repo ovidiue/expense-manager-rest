@@ -21,6 +21,10 @@ public class CategoryService {
     return this.categoryRepository.findAll();
   }
 
+  public List<Category> findAllWhereIdInList(List<Long> ids) {
+    return this.categoryRepository.findAllByIdIn(ids);
+  }
+
   public void saveCategory(Category category) {
     this.categoryRepository.save(category);
   }

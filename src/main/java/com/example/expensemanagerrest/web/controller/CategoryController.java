@@ -84,7 +84,9 @@ public class CategoryController {
   public ResponseEntity deleteCategories(@RequestBody List<Long> list,
       @RequestParam Boolean withExpenses) {
 
-    List<Expense> expensesAttached = this.expenseService.findAllWithCategoryIdIn(list);
+    List<Category> categoriesToDelete = this.categoryService.findAllWhereIdInList(list);
+    List<Expense> expensesAttached = this.expenseService
+        .findAllWithCategoryInList(categoriesToDelete);
     log.info("\nLIST: {}", list);
     log.info("\nexpensesAttached: {}", expensesAttached);
     log.info("\nexpensesAttachedSize: {}", expensesAttached.size());
