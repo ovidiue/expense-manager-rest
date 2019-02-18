@@ -11,6 +11,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,10 +41,9 @@ public class CategoryController {
   private RateService rateService;
 
   @GetMapping("/categories")
-  public List<Category> getCategories() {
-    List<Category> categories = categoryService.findAll();
-    //return ResponseEntity.status(HttpStatus.OK).body(categories);
-    return categories;
+  public ResponseEntity<Page<Category>> getCategories(Pageable pageable) {
+    Page<Category> categories = categoryService.findAll(pageable);
+    return ResponseEntity.ok(categories);
   }
 
   @GetMapping("/categories/{catId}")
