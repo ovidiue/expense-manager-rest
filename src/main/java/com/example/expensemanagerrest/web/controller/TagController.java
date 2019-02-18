@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,10 +34,9 @@ public class TagController {
   private ExpenseService expenseService;
 
   @GetMapping("/tags")
-  public List<Tag> gettags() {
-    List<Tag> tags = tagService.findAll();
-    //return ResponseEntity.status(HttpStatus.OK).body(tags);
-    return tags;
+  public ResponseEntity<Page<Tag>> getTags(Pageable pageable) {
+    Page<Tag> tags = tagService.findAll(pageable);
+    return ResponseEntity.ok(tags);
   }
 
   @GetMapping("/tags/{tagId}")

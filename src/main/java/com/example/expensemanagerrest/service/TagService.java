@@ -5,6 +5,8 @@ import com.example.expensemanagerrest.repository.TagRepository;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +19,8 @@ public class TagService {
   @Autowired
   private TagRepository tagRepository;
 
-  public List<Tag> findAll() {
-    return this.tagRepository.findAll();
+  public Page<Tag> findAll(Pageable pageable) {
+    return this.tagRepository.findAll(pageable);
   }
 
   public void saveTag(Tag tag) {
