@@ -169,7 +169,9 @@ public class ExpenseService {
     }
 
     query.select(r).where(predicates.toArray(new Predicate[]{}));
-    query.orderBy(getOrderByExpression(criteriaBuilder, r, pageable));
+    if (pageable.getSort().get().count() > 0) {
+      query.orderBy(getOrderByExpression(criteriaBuilder, r, pageable));
+    }
     TypedQuery<Expense> typedQuery = this.em.createQuery(query);
     log.info("\nPageable {}", pageable);
     log.info("\nPageable size {}", pageable.getPageSize());
