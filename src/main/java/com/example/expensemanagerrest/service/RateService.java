@@ -4,6 +4,8 @@ import com.example.expensemanagerrest.model.Rate;
 import com.example.expensemanagerrest.repository.RateRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,8 +18,8 @@ public class RateService {
   @Autowired
   private RateRepository rateRepository;
 
-  public List<Rate> findAll() {
-    return this.rateRepository.findAll();
+  public Page<Rate> findAll(Pageable pageable) {
+    return this.rateRepository.findAll(pageable);
   }
 
   public void saveRate(Rate rate) {
@@ -32,8 +34,8 @@ public class RateService {
     return this.rateRepository.getOne(catId);
   }
 
-  public List<Rate> findAllByExpenseId(Long id) {
-    return this.rateRepository.findAllByExpense_Id(id);
+  public Page<Rate> findAllByExpenseId(Long id, Pageable pageable) {
+    return this.rateRepository.findAllByExpense_Id(id, pageable);
   }
 
   public List<Rate> findAllByExpenseIdsList(List<Long> ids) {

@@ -7,6 +7,8 @@ import com.example.expensemanagerrest.service.RateService;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -34,18 +36,19 @@ public class RateController {
   private ExpenseService expenseService;
 
   @GetMapping("")
-  public List<Rate> getRates() {
+  public ResponseEntity<Page<Rate>> getRates(Pageable pageable) {
     log.info("\ngetRates called");
-    List<Rate> rates = rateService.findAll();
-    return rates;
+    Page<Rate> rates = rateService.findAll(pageable);
+    return ResponseEntity.ok(rates);
   }
 
   @GetMapping("/exp")
-  public List<Rate> getRatesByExpenseId(@RequestParam Long expId) {
+  public ResponseEntity<Page<Rate>> getRatesByExpenseId(@RequestParam Long expId,
+      Pageable pageable) {
     log.info("\nExpense id {}", expId);
-    List<Rate> rates = rateService.findAllByExpenseId(expId);
+    Page<Rate> rates = rateService.findAllByExpenseId(expId, pageable);
     log.info("\nrates by expense id {}", rates);
-    return rates;
+    return ResponseEntity.ok(rates);
   }
 
   @GetMapping("/expenses")

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -62,7 +63,7 @@ public class ExpenseController {
     log.info("\nRATES_TOO {}", ratesToo);
     if (ratesToo == true) {
       list.forEach(id -> {
-        List<Long> rateIds = this.rateService.findAllByExpenseId(id)
+        List<Long> rateIds = this.rateService.findAllByExpenseId(id, Pageable.unpaged())
             .stream()
             .map(rate -> rate.getId())
             .collect(Collectors.toList());
@@ -70,7 +71,7 @@ public class ExpenseController {
       });
     } else {
       list.forEach(id -> {
-        this.rateService.findAllByExpenseId(id)
+        this.rateService.findAllByExpenseId(id, Pageable.unpaged())
             .stream()
             .filter(rate -> rate.getExpense() != null)
             .forEach(rate -> {
