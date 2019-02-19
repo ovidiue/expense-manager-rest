@@ -10,13 +10,20 @@ import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,8 +72,8 @@ public class ExpenseService {
     return this.expenseRepository.findAllByCategoryIn(categories);
   }
 
-  public List<Expense> findAll(ExpenseFilter filter) {
-    log.info("findAll with filter called {}", filter);
+  public Page<Expense> findAll(ExpenseFilter filter, Pageable pageable) {
+    log.info("\nfindAll with filter called {}", filter);
     CriteriaBuilder criteriaBuilder = this.em.getCriteriaBuilder();
     CriteriaQuery<Expense> query = criteriaBuilder.createQuery(Expense.class);
     Root<Expense> r = query.from(Expense.class);
@@ -162,11 +169,35 @@ public class ExpenseService {
     }
 
     query.select(r).where(predicates.toArray(new Predicate[]{}));
-    return this.em.createQuery(query).getResultList();
+    query.orderBy(getOrderByExpression(criteriaBuilder, r, pageable));
+    TypedQuery<Expense> typedQuery = this.em.createQuery(query);
+    log.info("\nPageable {}", pageable);
+    log.info("\nPageable size {}", pageable.getPageSize());
+    log.info("\nPageable nr {}", pageable.getPageNumber());
+    int totalRows = typedQuery.getResultList().size();
+    typedQuery.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
+    typedQuery.setMaxResults(pageable.getPageSize());
+
+    Page<Expense> page = new PageImpl<Expense>(typedQuery.getResultList(), pageable,
+        totalRows);
+    log.info("\nPAGE {}", page.getNumber());
+    return page;
   }
 
   public List<Expense> findAllWhereTagsIdIn(List<Tag> tags) {
     return this.expenseRepository.findDistinctByTagsIn(tags);
+  }
+
+  private Order getOrderByExpression(CriteriaBuilder cb, Root<Expense> r, Pageable pageable) {
+    String field = pageable.getSort().get().findFirst().get().getProperty();
+    String direction = pageable.getSort().equals(new Sort(Direction.ASC, field)) ? "asc" : "desc";
+    Expression expression = r.get(field);
+    if (direction.equalsIgnoreCase("asc")) {
+      return cb.asc(expression);
+    } else {
+      return cb.desc(expression);
+    }
+
   }
 
 }

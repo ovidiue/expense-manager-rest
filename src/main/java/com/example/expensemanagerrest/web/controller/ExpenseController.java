@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,11 +35,9 @@ public class ExpenseController {
   private RateService rateService;
 
   @GetMapping("/expenses")
-  public List<Expense> getExpenses(ExpenseFilter expenseFilter) {
-    List<Expense> expenses = expenseService.findAll(expenseFilter);
-    log.info("\nexpenses with filter {}", expenses);
-    //return ResponseEntity.status(HttpStatus.OK).body(categories);
-    return expenses;
+  public ResponseEntity<Page<Expense>> getExpenses(ExpenseFilter expenseFilter, Pageable pageable) {
+    Page<Expense> expenses = expenseService.findAll(expenseFilter, pageable);
+    return ResponseEntity.ok(expenses);
   }
 
   @GetMapping("/expenses/{expId}")
