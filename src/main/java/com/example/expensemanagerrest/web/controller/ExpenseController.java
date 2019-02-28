@@ -37,7 +37,13 @@ public class ExpenseController {
   @GetMapping("/expenses")
   public ResponseEntity<Page<Expense>> getExpenses(ExpenseFilter expenseFilter, Pageable pageable) {
     Page<Expense> expenses = expenseService.findAll(expenseFilter, pageable);
+    log.info("\nLARGEST EXPENSE {} ", this.expenseService.getLargestExpense());
     return ResponseEntity.ok(expenses);
+  }
+
+  @GetMapping("/expenses/max")
+  public ResponseEntity<Double> getLargestExpense() {
+    return ResponseEntity.ok(this.expenseService.getLargestExpense());
   }
 
   @GetMapping("/expenses/{expId}")

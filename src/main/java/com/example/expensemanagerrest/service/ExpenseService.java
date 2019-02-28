@@ -59,6 +59,10 @@ public class ExpenseService {
     return this.expenseRepository.getOne(catId);
   }
 
+  public Double getLargestExpense() {
+    return this.expenseRepository.findLargestExpense();
+  }
+
   @Transactional
   public void deleteExpenses(List<Long> list) {
     this.expenseRepository.deleteByIdIn(list);
