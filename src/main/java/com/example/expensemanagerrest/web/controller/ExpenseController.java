@@ -1,7 +1,9 @@
 package com.example.expensemanagerrest.web.controller;
 
+import com.example.expensemanagerrest.model.Category;
 import com.example.expensemanagerrest.model.Expense;
 import com.example.expensemanagerrest.model.filters.ExpenseFilter;
+import com.example.expensemanagerrest.service.CategoryService;
 import com.example.expensemanagerrest.service.ExpenseService;
 import com.example.expensemanagerrest.service.RateService;
 import java.util.List;
@@ -33,6 +35,9 @@ public class ExpenseController {
 
   @Autowired
   private RateService rateService;
+
+  @Autowired
+  private CategoryService categoryService;
 
   @GetMapping("/expenses")
   public ResponseEntity<Page<Expense>> getExpenses(ExpenseFilter expenseFilter, Pageable pageable) {
@@ -90,4 +95,16 @@ public class ExpenseController {
     return ResponseEntity.ok(list);
   }
 
+  @PostMapping("/expenses/set-category/{categoryId}")
+  public void setNewCategory(@PathVariable Long categoryId, @RequestBody List<Long> expIds) {
+    log.info("\nCATEGORY TO SET {}", categoryId);
+    log.info("\nExpIds TO SET {}", expIds);
+    Category category = this.categoryService.findById(categoryId).get();
+    List<Expense> expenses = this.expenseService.findAllWithIdIn(expIds);
+    expenses.stream()
+        .forEach(expense -> {
+          expense.setCategory(category);
+          this.expenseService.saveExpense(expense);
+        });
+  }
 }
