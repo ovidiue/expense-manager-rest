@@ -67,7 +67,10 @@ public class TagController {
           expense.getTags().removeAll(toRemove);
           this.expenseService.saveExpense(expense);
         });
-    this.tagService.deleteTags(list.stream().map(Tag::getId).collect(Collectors.toList()));
+    this.tagService.deleteTags(
+        list.stream()
+            .map(Tag::getId)
+            .collect(Collectors.toList()));
     return ResponseEntity.ok(list);
   }
 
