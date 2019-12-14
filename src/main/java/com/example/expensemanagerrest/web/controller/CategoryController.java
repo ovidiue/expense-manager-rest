@@ -3,12 +3,15 @@ package com.example.expensemanagerrest.web.controller;
 import com.example.expensemanagerrest.model.Category;
 import com.example.expensemanagerrest.model.Expense;
 import com.example.expensemanagerrest.model.Rate;
+import com.example.expensemanagerrest.model.stats.CategoryStats;
 import com.example.expensemanagerrest.service.CategoryService;
 import com.example.expensemanagerrest.service.ExpenseService;
 import com.example.expensemanagerrest.service.RateService;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.xml.ws.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -57,6 +60,11 @@ public class CategoryController {
   @GetMapping("/categories/name/{name}")
   public Category getCategoryByName(@PathVariable String name) {
     return this.categoryService.getByName(name);
+  }
+
+  @PutMapping("/categories/update")
+  public Category updateCategory(@RequestBody Category category) {
+    return this.categoryService.update(category);
   }
 
   @PostMapping("/categories/save")
@@ -109,5 +117,16 @@ public class CategoryController {
     return ResponseEntity.ok(list);
   }
 
+  @GetMapping("/categories/count")
+  public ResponseEntity<Map<String, Integer>> getCategoryCount() {
+    Map<String, Integer> categories = this.categoryService.getCategoryCount();
+    return ResponseEntity.ok(categories);
+  }
+
+  @GetMapping("/categories/info")
+  public ResponseEntity<List<CategoryStats>> getCategoryInfo() {
+    List<CategoryStats> stats = this.categoryService.getCategoryInfo();
+    return ResponseEntity.ok(stats);
+  }
 
 }

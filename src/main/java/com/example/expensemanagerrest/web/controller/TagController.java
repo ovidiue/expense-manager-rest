@@ -2,6 +2,7 @@ package com.example.expensemanagerrest.web.controller;
 
 import com.example.expensemanagerrest.model.Expense;
 import com.example.expensemanagerrest.model.Tag;
+import com.example.expensemanagerrest.model.stats.CategoryStats;
 import com.example.expensemanagerrest.service.ExpenseService;
 import com.example.expensemanagerrest.service.TagService;
 import java.util.List;
@@ -77,6 +78,12 @@ public class TagController {
   @GetMapping("/tags/name/{name}")
   public Optional<Tag> getTagByName(@PathVariable String name) {
     return this.tagService.findByName(name);
+  }
+
+  @GetMapping("/tags/tag-info")
+  public ResponseEntity<List<CategoryStats>> getTagInfo() {
+    List<CategoryStats> stats = this.tagService.getTagInfo();
+    return ResponseEntity.ok(stats);
   }
 
 }

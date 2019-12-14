@@ -4,10 +4,13 @@ import com.example.expensemanagerrest.model.Category;
 import com.example.expensemanagerrest.model.Expense;
 import com.example.expensemanagerrest.model.Tag;
 import com.example.expensemanagerrest.model.filters.ExpenseFilter;
+import com.example.expensemanagerrest.model.stats.ExpenseSimplified;
+import com.example.expensemanagerrest.model.stats.ExpenseStats;
 import com.example.expensemanagerrest.repository.ExpenseRepository;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -45,6 +48,14 @@ public class ExpenseService {
 
   public List<Expense> findAll() {
     return this.expenseRepository.findAll();
+  }
+
+  public int countWithCategory(Category category) {
+    return this.expenseRepository.countAllByCategory(category);
+  }
+
+  public List<Expense> findAllWithCategory(Category category) {
+    return expenseRepository.findAllWithCategory(category);
   }
 
   public void saveExpense(Expense expense) {
@@ -203,6 +214,45 @@ public class ExpenseService {
     } else {
       return cb.desc(expression);
     }
+
+  }
+
+  public List<Expense> findAllThatHaveTag(Tag tag) {
+    return expenseRepository.findAllWhereTag(tag);
+  }
+
+  public List<ExpenseSimplified> findAllSimple() {
+    List<ExpenseSimplified> result = new ArrayList<>();
+    return this.expenseRepository.findAll().stream()
+        .map(ex -> new ExpenseSimplified(ex.getTitle(), ex.isRecurrent(), ex.getCreatedOn(),
+            ex.getDueDate(), ex.getAmount(), ex.getId(), ex.getPayed(), ex.getCreatedOn().getMonth()))
+        .collect(Collectors.toList());
+  }
+
+  public ExpenseStats getStatsInfo() {
+    List<ExpenseSimplified> expenses = this.findAllSimple();
+    double min = expenses.stream().mapToDouble(ex -> ex.getAmount()).min().orElse(0);
+    double max = expenses.stream().mapToDouble(ex -> ex.getAmount()).max().orElse(0);
+    double averageReccurent = expenses.stream()
+        .filter(ex -> ex.isRecurrent() == true)
+        .mapToDouble(ex -> ex.getAmount()).average()
+        .orElse(0);
+    double averageNonReccurent = expenses.stream()
+        .filter(ex -> ex.isRecurrent() == false)
+        .mapToDouble(ex -> ex.getAmount()).average()
+        .orElse(0);
+    long noOfExpenses = expenses.stream().count();
+    long partialPayed = expenses.stream()
+        .filter(ex -> {
+          return ex.getPayed() != 0.0 && Double.compare(ex.getAmount(), ex.getPayed()) != 0;
+        }).count();
+    long payed = expenses.stream()
+        .filter(ex -> {
+          return Double.compare(ex.getAmount(), ex.getPayed()) == 0;
+        }).count();
+
+    return new ExpenseStats(noOfExpenses, max, min, averageNonReccurent, averageReccurent,
+        partialPayed, payed);
 
   }
 

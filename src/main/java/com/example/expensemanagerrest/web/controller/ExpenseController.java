@@ -3,6 +3,8 @@ package com.example.expensemanagerrest.web.controller;
 import com.example.expensemanagerrest.model.Category;
 import com.example.expensemanagerrest.model.Expense;
 import com.example.expensemanagerrest.model.filters.ExpenseFilter;
+import com.example.expensemanagerrest.model.stats.ExpenseSimplified;
+import com.example.expensemanagerrest.model.stats.ExpenseStats;
 import com.example.expensemanagerrest.service.CategoryService;
 import com.example.expensemanagerrest.service.ExpenseService;
 import com.example.expensemanagerrest.service.RateService;
@@ -106,5 +108,16 @@ public class ExpenseController {
           expense.setCategory(category);
           this.expenseService.saveExpense(expense);
         });
+  }
+
+  @GetMapping("/expenses/simple-expenses")
+  public ResponseEntity<List<ExpenseSimplified>> getSimpleExpenses() {
+    List<ExpenseSimplified> list = this.expenseService.findAllSimple();
+    return ResponseEntity.ok(list);
+  }
+
+  @GetMapping("/expenses/expense-stats")
+  public ResponseEntity<ExpenseStats> getExpenseStats() {
+    return ResponseEntity.ok(this.expenseService.getStatsInfo());
   }
 }
