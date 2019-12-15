@@ -68,12 +68,12 @@ public class CategoryController {
   }
 
   @PostMapping("/categories/save")
-  public ResponseEntity saveCategory(@RequestBody Category category) {
+  public ResponseEntity<Object> saveCategory(@RequestBody Category category) {
     if (this.categoryService.getByName(category.getName()) != null) {
       return ResponseEntity.badRequest().body("name exists");
     } else {
       this.categoryService.saveCategory(category);
-      return ResponseEntity.ok().build();
+      return ResponseEntity.ok(category);
     }
   }
 
