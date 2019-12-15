@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -84,6 +85,12 @@ public class TagController {
   public ResponseEntity<List<CategoryStats>> getTagInfo() {
     List<CategoryStats> stats = this.tagService.getTagInfo();
     return ResponseEntity.ok(stats);
+  }
+
+  // TODO correct update
+  @PutMapping("/tags/update")
+  public void update(@RequestBody Tag tag) {
+    this.tagService.saveTag(tag);
   }
 
 }
