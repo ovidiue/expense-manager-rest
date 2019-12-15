@@ -83,8 +83,7 @@ public class RateController {
 
   @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
   public void updateRate(@RequestBody Rate rate,
-      @RequestParam(required = false) Long initialExpenseId,
-      @RequestParam Long initialRateAmount) {
+      @RequestParam(required = false) Long initialExpenseId) {
     Rate initialRate = this.rateService.getRate(rate.getId());
 
     if (rate.getExpense() != null) {
