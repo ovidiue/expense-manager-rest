@@ -3,6 +3,7 @@ package com.example.expensemanagerrest.web.controller;
 import com.example.expensemanagerrest.config.JwtTokenUtil;
 import com.example.expensemanagerrest.model.JwtRequest;
 import com.example.expensemanagerrest.model.JwtResponse;
+import com.example.expensemanagerrest.model.UserDTO;
 import com.example.expensemanagerrest.service.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,11 @@ public class JwtAuthenticationController {
     final String token = jwtTokenUtil.generateToken(userDetails);
 
     return ResponseEntity.ok(new JwtResponse(token));
+  }
+
+  @RequestMapping(value = "/register", method = RequestMethod.POST)
+  public ResponseEntity<?> saveUser(@RequestBody UserDTO user) throws Exception {
+    return ResponseEntity.ok(jwtUserDetailsService.save(user));
   }
 
   private void authenticate(String username, String password) throws Exception {
