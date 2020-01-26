@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import javax.xml.ws.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -45,6 +44,7 @@ public class CategoryController {
 
   @GetMapping("/categories")
   public ResponseEntity<Page<Category>> getCategories(Pageable pageable) {
+    log.info("[Category] Get Categories");
     Page<Category> categories = categoryService.findAll(pageable);
     return ResponseEntity.ok(categories);
   }
