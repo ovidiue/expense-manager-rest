@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
@@ -17,7 +18,8 @@ public class DAOUser {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
-  @Column
+  @Column(unique = true)
+  @NotNull
   private String username;
   @Column
   @JsonIgnore
